@@ -1,0 +1,11 @@
+users = ["aizen", "shinji", "yhwach", "rukia"]
+print(users[2])
+users.append("naruto")
+print(users)
+users.remove("rukia")
+print(users)
+print(len(users))
+users.insert(0, "pain")
+print(users)
+users.pop()
+print(users)
