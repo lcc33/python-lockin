@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes Dashboard</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='image.png') }}"
+    />
+    <style>
+      :root {
+        --primary-color: #4f8cff;
+        --accent-color: #ffb347;
+        --danger-color: #e74c3c;
+        --text-color: #333;
+        --bg-color: #f4f6fa;
+        --white: #fff;
+        --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        --radius: 8px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--bg-color);
+        color: var(--text-color);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--primary-color);
+        padding: 1rem 2rem;
+        color: var(--white);
+        box-shadow: var(--shadow);
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .signout-btn {
+        background: var(--white);
+        color: var(--primary-color);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .signout-btn:hover {
+        background: var(--accent-color);
+        color: var(--white);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 2rem auto;
+        background: var(--white);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      .container h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+      }
+
+      .lead {
+        color: #555;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group input {
+        flex: 1;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: var(--radius);
+        font-size: 1rem;
+      }
+
+      .btn-add {
+        background: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .btn-add:hover {
+        background: var(--accent-color);
+      }
+
+      .notes-section h2 {
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        color: #555;
+      }
+
+      .notes-list {
+        list-style: none;
+      }
+
+      .note-item {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
+
+      .note-item button {
+        background: var(--danger-color);
+        color: var(--white);
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+      }
+
+      .note-item button:hover {
+        background: #c0392b;
+      }
+      .note-item {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        gap: 1rem; /* Add gap for spacing */
+        word-break: break-word; /* Ensure long words break */
+      }
+
+      .note-item span {
+        flex: 1 1 0;
+        min-width: 0;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+        display: block;
+        margin-right: 1rem;
+        max-width: 100%;
+      }
+
+      .note-item button {
+        flex-shrink: 0;
+      }
+
+      .empty-msg {
+        color: #777;
+        font-style: italic;
+        margin-top: 1rem;
+      }
+
+      .alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s, transform 0.4s;
+        transform: translateY(-20px);
+        z-index: 9999;
+      }
+
+      .alert.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">Notes App</div>
+      <button class="signout-btn" onclick="signOut()">Sign Out</button>
+    </nav>
+
+    <div class="container">
+      <h1>Welcome, {{ user }}</h1>
+      <p class="lead">Write something meaningful below 📝</p>
+
+      <div class="input-group">
+        <input type="text" id="noteInput" placeholder="Enter a new note" />
+        <button class="btn-add" onclick="addNote()">Add Note</button>
+      </div>
+
+      <div class="notes-section">
+        <h2>Your Notes</h2>
+        <ul class="notes-list" id="notesList"></ul>
+        <p class="empty-msg" id="emptyMsg">You have no notes yet.</p>
+      </div>
+    </div>
+
+    <div id="alertBox" class="alert">Note created!</div>
+    <div id="alertDelete" class="alert" style="background: var(--danger-color)">
+      Note deleted!
+    </div>
+
+    <script>
+      function signOut() {
+        fetch("/logout").then(() => (window.location.href = "/login"));
+      }
+
+      function addNote() {
+        const note = document.getElementById("noteInput").value.trim();
+        if (!note) return;
+
+        fetch("/api/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ note }),
+        }).then((res) => {
+          if (res.ok) {
+            document.getElementById("noteInput").value = "";
+            loadNotes();
+            showAlert("alertBox");
+          }
+        });
+      }
+
+      function deleteNote(index) {
+        fetch(`/notes/${index}`, { method: "DELETE" }).then((res) => {
+          if (res.ok) {
+            loadNotes();
+            showAlert("alertDelete");
+          }
+        });
+      }
+
+      function loadNotes() {
+        fetch("/api/notes")
+          .then((res) => res.json())
+          .then((notes) => {
+            const list = document.getElementById("notesList");
+            const emptyMsg = document.getElementById("emptyMsg");
+            list.innerHTML = "";
+
+            if (notes.length === 0) {
+              emptyMsg.style.display = "block";
+              return;
+            }
+
+            emptyMsg.style.display = "none";
+            notes.forEach((note, index) => {
+              const li = document.createElement("li");
+              li.className = "note-item";
+              li.innerHTML = `
+              <span>${note}</span>
+              <button onclick="deleteNote(${index})">Delete</button>
+            `;
+              list.appendChild(li);
+            });
+          });
+      }
+
+      function showAlert(id) {
+        const alert = document.getElementById(id);
+        alert.classList.add("show");
+        setTimeout(() => alert.classList.remove("show"), 2000);
+      }
+
+      document.addEventListener("DOMContentLoaded", loadNotes);
+    </script>
+  </body>
+</html>

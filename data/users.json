@@ -1,0 +1,15 @@
+[
+  {
+    "username": "eniola",
+    "password": "scrypt:32768:8:1$Cgghc2kpJz2uQ07E$2983f8dbcfea7a3628ee20a090eebfec22af23af793b1722fe1933c7f6374f24193a6cd6529e192487ca7b4825db4d9f91d5ef4b51d65f2490c4ffc5c8baa9b4",
+    "notes": []
+  },
+  {
+    "username": "admin",
+    "password": "scrypt:32768:8:1$TDEeSoWu3DSt59os$7a695f20b2eac61d6c0bf85aac498b07233da864f3f5ca98f0c0c7e11ca99233675cd0d2d712dbf55ce65bdc26920d75ee1af59217c82ebea4bd90f85a164e51",
+    "notes": [
+      "dsvasg",
+      "jfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    ]
+  }
+]

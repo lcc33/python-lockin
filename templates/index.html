@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes App</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='image.png') }}"
+    />
+    <style>
+      :root {
+        --primary-color: #4f8cff;
+        --accent-color: #ffb347;
+        --text-color: #222;
+        --bg-color: #f9fafc;
+        --nav-bg-color: #fff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--nav-bg-color);
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-color);
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        transition: background 0.2s, color 0.2s;
+        font-weight: 500;
+      }
+
+      .nav-links a.login {
+        border: 1.5px solid var(--primary-color);
+      }
+
+      .nav-links a.signup {
+        background: var(--primary-color);
+        color: #fff;
+      }
+
+      .nav-links a:hover {
+        background: var(--accent-color);
+        color: #fff;
+      }
+
+      .menu-btn {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .menu-btn span {
+        width: 24px;
+        height: 3px;
+        background: var(--primary-color);
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: transform 0.3s ease;
+      }
+
+      @media (max-width: 700px) {
+        .nav-links {
+          flex-direction: column;
+          position: absolute;
+          top: 64px;
+          right: 0;
+          background: var(--nav-bg-color);
+          width: 180px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+          display: none;
+        }
+
+        .nav-links.open {
+          display: flex;
+        }
+
+        .menu-btn {
+          display: flex;
+        }
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        color: #555;
+        max-width: 600px;
+        margin-bottom: 2rem;
+      }
+
+      .cta-btn {
+        background: var(--primary-color);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 2.2rem;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-decoration: none;
+      }
+
+      .cta-btn:hover {
+        background: var(--accent-color);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">NotesApp</div>
+      <div class="menu-btn" id="menuBtn" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/login" class="login">Login</a>
+        <a href="/signup" class="signup">Sign Up</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <h1>Organize Your Thoughts Effortlessly</h1>
+      <p>
+        Take notes, stay organized, and access your ideas anywhere. Simple,
+        fast, and secure.
+      </p>
+      <a href="/notes" class="cta-btn">Get Started</a>
+    </section>
+
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const navLinks = document.getElementById("navLinks");
+
+      menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("open");
+      });
+      document.addEventListener("click", (e) => {
+        if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+          navLinks.classList.remove("open");
+        }
+      });
+    </script>
+  </body>
+</html>

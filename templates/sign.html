@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='image.png') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+      }
+      .container {
+        background: #fff;
+        padding: 2.5rem 2rem 2rem 2rem;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        max-width: 350px;
+        width: 100%;
+        text-align: center;
+      }
+      h2 {
+        margin-bottom: 1.5rem;
+        color: #2d3a4b;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      input[type="text"],
+      input[type="password"] {
+        padding: 0.8rem 1rem;
+        border: 1px solid #cfd8dc;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #f7fafc;
+        transition: border 0.2s;
+      }
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border: 1.5px solid #66a6ff;
+        outline: none;
+        background: #fff;
+      }
+      button[type="submit"] {
+        background: linear-gradient(90deg, #66a6ff 0%, #89f7fe 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.9rem 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(102, 166, 255, 0.15);
+        transition: background 0.2s, transform 0.1s;
+      }
+      button[type="submit"]:hover {
+        background: linear-gradient(90deg, #89f7fe 0%, #66a6ff 100%);
+        transform: translateY(-2px) scale(1.03);
+      }
+      .info {
+        margin-bottom: 2rem;
+        color: #607d8b;
+        font-size: 1rem;
+      }
+      .success-message {
+        color: #43a047;
+        margin-top: 1rem;
+        font-weight: 500;
+        display: none;
+      }
+      h3 {
+        display: none;
+        margin-bottom: 2rem;
+        color: #607d8b;
+        font-size: 1rem;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Sign Up</h2>
+      <div class="info">Create your account by filling the form below.</div>
+      <form id="signupForm">
+        <h3 id="errMsg">That username is already taken</h3>
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+        <div style="margin-top: 1rem">
+          <a
+            href="/login"
+            style="color: #66a6ff; text-decoration: none; font-size: 0.97rem"
+          >
+            Already have an account? Log in
+          </a>
+        </div>
+      </form>
+      <div class="success-message" id="successMsg">
+        Thank you for signing up!
+      </div>
+    </div>
+
+    <script>
+      const errMsg = document.getElementById("errMsg");
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const data = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+          };
+
+          fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          }).then(async (res) => {
+            const contentType = res.headers.get("content-type");
+                window.location.href = "/notes";
+            if (!contentType || !contentType.includes("application/json")) {
+              const text = await res.text();
+              throw new Error("Non-JSON returned: " + text);
+            }
+            return res.json();
+              window.location.href = "/login";
+          });
+        });
+    </script>
+  </body>
+</html>
